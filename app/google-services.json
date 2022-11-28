@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706176428778",
+    "project_id": "rts-fragment",
+    "storage_bucket": "rts-fragment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706176428778:android:3c3e29777b76be35658593",
+        "android_client_info": {
+          "package_name": "com.example.rts_fragment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706176428778-l5sa0tlq3f20qhlo43fg4foh35ir0emi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRFxnWaKqqVq-wyicvUBZlDKLeaDFz32g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706176428778-l5sa0tlq3f20qhlo43fg4foh35ir0emi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

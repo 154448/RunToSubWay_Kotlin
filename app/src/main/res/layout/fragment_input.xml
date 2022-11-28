@@ -267,7 +267,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#FFFFFF"
                 android:gravity="center"
-                android:text="Tur" />
+                android:text="Thu" />
 
             <Button
                 android:id="@+id/btn_tur"

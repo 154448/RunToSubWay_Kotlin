@@ -10,7 +10,9 @@ import android.widget.TimePicker
 import androidx.fragment.app.activityViewModels
 import com.example.rts_fragment.databinding.FragmentInputBinding
 import com.example.rts_fragment.viewmodel.TraidDataViewModel
-import java.util.Calendar
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class InputFragment : Fragment() {
 
@@ -27,15 +29,21 @@ class InputFragment : Fragment() {
             binding?.textTimeSecond?.text = viewModel.timeTwo.value
             binding?.textTimeThird?.text = viewModel.timeThree.value
             binding?.textTimeFourth?.text = viewModel.timeFour.value
+            println(viewModel.alarm)
         }
     }
 
-    fun getTime(index: Int){
+    fun getTime(day: String, index: Int){
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            viewModel.setInfo(index, hourOfDay.toString(),minute.toString())
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.HOUR, hourOfDay)
+            cal.set(Calendar.MINUTE, minute)
+            val k = Timestamp(cal.timeInMillis)
+            viewModel.setTime(day, k)
+            val t_dataFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss E", Locale("ko", "KR"))
             //임시
-            binding?.textInputData?.text = viewModel.userInfo[index * 2].toString()
+            binding?.textInputData?.text = t_dataFormat.format(k).toString()
         }
         TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
     }
@@ -54,46 +62,45 @@ class InputFragment : Fragment() {
         updateUi()
 
         binding?.btnMon?.setOnClickListener {
-            getTime(0)
+            getTime("mon",0)
         }
         binding?.btnTue?.setOnClickListener {
-            getTime(1)
+            getTime("tue", 1)
         }
         binding?.btnWen?.setOnClickListener {
-            getTime(2)
+            getTime("wen",2)
         }
         binding?.btnTur?.setOnClickListener {
-            getTime(3)
+            getTime("thu",3)
         }
         binding?.btnFri?.setOnClickListener {
-            getTime(4)
+            getTime("fri",4)
         }
         binding?.btnSat?.setOnClickListener {
-            getTime(5)
+            getTime("sat",5)
         }
         binding?.btnSun?.setOnClickListener {
-            getTime(6)
+            getTime("sun",6)
         }
 
         //Alarm_On/Off_represent
         viewModel.alarm.observe(viewLifecycleOwner){
-            binding?.chkMon?.isChecked = viewModel.isZero
-            binding?.chkTue?.isChecked = viewModel.isOne
-            binding?.chkWen?.isChecked = viewModel.isTwo
-            binding?.chkTur?.isChecked = viewModel.isThree
-            binding?.chkFri?.isChecked = viewModel.isFour
-            binding?.chkSat?.isChecked = viewModel.isFive
-            binding?.chkSun?.isChecked = viewModel.isSix
-            binding?.radioButtonWayS?.isChecked = viewModel.isWay
-            binding?.radioButtonWayG?.isChecked = !(viewModel.isWay)
+            binding?.chkMon?.isChecked = viewModel.isZero == true
+            binding?.chkTue?.isChecked = viewModel.isOne == true
+            binding?.chkWen?.isChecked = viewModel.isTwo == true
+            binding?.chkTur?.isChecked = viewModel.isThree == true
+            binding?.chkFri?.isChecked = viewModel.isFour == true
+            binding?.chkSat?.isChecked = viewModel.isFive == true
+            binding?.chkSun?.isChecked = viewModel.isSix == true
+            binding?.radioButtonWayS?.isChecked = viewModel.isWay == true
+            binding?.radioButtonWayG?.isChecked = viewModel.isWay == false
 
-            //임시
-            binding?.textInputData?.text = viewModel.alarm.value
         }
 
         //Alarm_On/Off_Set
         binding?.chkMon?.setOnClickListener {
             viewModel.setZero(binding?.chkMon?.isChecked?: false)
+            binding?.textInputData?.text = binding?.chkMon?.isChecked.toString()
         }
         binding?.chkTue?.setOnClickListener {
             viewModel.setOne(binding?.chkTue?.isChecked?: false)

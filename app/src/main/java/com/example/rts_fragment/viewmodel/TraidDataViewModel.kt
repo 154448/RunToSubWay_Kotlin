@@ -1,26 +1,29 @@
 package com.example.rts_fragment.viewmodel
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-/*
-class DataStoreMoudle(private val context: Context){
-    private val context: Context.datastore by
-            prefer
+import com.example.rts_fragment.repository.UserDataRepository
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.LocalTime
 
-}
-
- */
-const val UNCHECKED = "00000000"
+val UNCHECKED = booleanArrayOf(false, false, false, false, false, false, false, false)
 class TraidDataViewModel: ViewModel() {
-    val temp : Array<String?> = arrayOfNulls<String?>(14)
-    private val _userInfo: MutableList<String?> = temp.toMutableList()
-    val userInfo: MutableList<String?> get() = _userInfo
-
     //AlarmData
-    private val _alarm = MutableLiveData<String>(UNCHECKED)
-    val alarm: LiveData<String> get() = _alarm
+    private val _alarm = MutableLiveData<BooleanArray>(UNCHECKED)
+    val alarm: LiveData<BooleanArray> get() = _alarm
+
+    private val repository = UserDataRepository()
+    init{
+        repository.getInfo(_alarm)
+    }
 
     //Train_Information
     private val _wayOne = MutableLiveData<String>("집으로")
@@ -42,58 +45,61 @@ class TraidDataViewModel: ViewModel() {
     val timeFour: LiveData<String> get() = _timeFour
 
     //For_input_Fragment_chkBox
-    val isZero get() = alarm.value?.get(0) == '1'
-    val isOne get() = alarm.value?.get(1) == '1'
-    val isTwo get() = alarm.value?.get(2) == '1'
-    val isThree get() = alarm.value?.get(3) == '1'
-    val isFour get() = alarm.value?.get(4) == '1'
-    val isFive get() = alarm.value?.get(5) == '1'
-    val isSix get() = alarm.value?.get(6) == '1'
+    val isZero get() = alarm.value?.get(0)
+    val isOne get() = alarm.value?.get(1)
+    val isTwo get() = alarm.value?.get(2)
+    val isThree get() = alarm.value?.get(3)
+    val isFour get() = alarm.value?.get(4)
+    val isFive get() = alarm.value?.get(5)
+    val isSix get() = alarm.value?.get(6)
     //열차방면
-    val isWay get() = alarm.value?.get(7) == '1'
+    val isWay get() = alarm.value?.get(7)
 
-    private fun modifyAlarm(index: Int, newValue: Char){
+    private fun modifyAlarm(index: Int, newValue: Boolean){
         _alarm.value = _alarm.value?.let{
-            val chArr = it.toCharArray()
-            chArr[index] = newValue
-            String(chArr)
+            val boolArr = it
+            boolArr[index] = newValue
+            boolArr
         }?: UNCHECKED
     }
 
     fun setZero(newValue: Boolean){
-        modifyAlarm(0, if(newValue) '1' else '0')
+        println(newValue)
+        modifyAlarm(0, newValue)
+        repository.updateAlarmChk("mon", newValue)
     }
     fun setOne(newValue: Boolean){
-        modifyAlarm(1, if(newValue) '1' else '0')
+        modifyAlarm(1, newValue)
+        repository.updateAlarmChk("tue", newValue)
     }
     fun setTwo(newValue: Boolean){
-        modifyAlarm(2, if(newValue) '1' else '0')
+        modifyAlarm(2, newValue)
+        repository.updateAlarmChk("wen", newValue)
     }
     fun setThree(newValue: Boolean){
-        modifyAlarm(3, if(newValue) '1' else '0')
+        modifyAlarm(3, newValue)
+        repository.updateAlarmChk("thu", newValue)
     }
     fun setFour(newValue: Boolean){
-        modifyAlarm(4, if(newValue) '1' else '0')
+        modifyAlarm(4,newValue)
+        repository.updateAlarmChk("fri", newValue)
     }
     fun setFive(newValue: Boolean){
-        modifyAlarm(5, if(newValue) '1' else '0')
+        modifyAlarm(5, newValue)
+        repository.updateAlarmChk("sat", newValue)
     }
     fun setSix(newValue: Boolean){
-        modifyAlarm(6, if(newValue) '1' else '0')
+        modifyAlarm(6, newValue)
+        repository.updateAlarmChk("sun", newValue)
     }
     //inputFragment_radioGroupWay
     fun setWay(newValue: Boolean){
-        modifyAlarm(7, if(newValue) '1' else '0')
+        modifyAlarm(7, newValue)
+        repository.updateWay(newValue)
     }
 
-    private fun modifyUserData(index: Int, hour:String, min: String){
-        _userInfo[index * 2] = hour
-        _userInfo[index * 2 + 1] = min
-
-    }
-
-    fun setInfo(index: Int, hour: String, min: String){
-        modifyUserData(index, hour, min)
+    fun setTime(day: String, time: Timestamp){
+        repository.updateTime(day, time)
     }
 
 

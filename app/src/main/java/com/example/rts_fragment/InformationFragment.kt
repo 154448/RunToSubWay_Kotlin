@@ -14,28 +14,6 @@ class InformationFragment : Fragment() {
     val viewModel: TraidDataViewModel by activityViewModels()
     var binding : FragmentInformationBinding?= null
 
-    fun updateWay(){
-        viewModel.timeOne.observe(viewLifecycleOwner){
-            binding?.textWayGFirst?.text = viewModel.wayOne.value
-            binding?.textWayGSecond?.text = viewModel.wayTwo.value
-            binding?.textWaySFirst?.text = viewModel.wayThree.value
-            binding?.textWaySSecond?.text = viewModel.wayFour.value
-        }
-    }
-    fun updateTime(){
-        viewModel.timeOne.observe(viewLifecycleOwner){
-            binding?.textTimeGFirst?.text = viewModel.timeOne.value
-            binding?.textTimeGSecond?.text = viewModel.timeTwo.value
-            binding?.textTimeSFirst?.text = viewModel.timeThree.value
-            binding?.textTimeSSecond?.text = viewModel.timeFour.value
-        }
-    }
-
-    fun updateUi(){
-        updateTime()
-        updateWay()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,10 +25,33 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateUi()
+        viewModel.wayOne.observe(viewLifecycleOwner){
+            binding?.textWayGFirst?.text = viewModel.wayOne.value
+        }
+        viewModel.wayTwo.observe(viewLifecycleOwner){
+            binding?.textWayGSecond?.text = viewModel.wayOne.value
+        }
+        viewModel.wayThree.observe(viewLifecycleOwner){
+            binding?.textWaySFirst?.text = viewModel.wayOne.value
+        }
+        viewModel.wayFour.observe(viewLifecycleOwner){
+            binding?.textWaySSecond?.text = viewModel.wayOne.value
+        }
+
+        viewModel.timeOne.observe(viewLifecycleOwner){
+            binding?.textTimeGFirst?.text = viewModel.wayOne.value
+        }
+        viewModel.timeTwo.observe(viewLifecycleOwner){
+            binding?.textTimeGSecond?.text = viewModel.wayOne.value
+        }
+        viewModel.timeThree.observe(viewLifecycleOwner){
+            binding?.textTimeSFirst?.text = viewModel.wayOne.value
+        }
+        viewModel.timeFour.observe(viewLifecycleOwner){
+            binding?.textTimeSSecond?.text = viewModel.wayOne.value
+        }
 
         binding?.btnUpdate?.setOnClickListener{
-            updateUi()
         }
     }
 
