@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import com.example.rts_fragment.databinding.FragmentInputBinding
 import com.example.rts_fragment.viewmodel.TraidDataViewModel
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
 import java.util.*
 
 class InputFragment : Fragment() {
@@ -32,7 +31,7 @@ class InputFragment : Fragment() {
         }
     }
 
-    fun getTime(day: String, index: Int){
+    fun getTime(day: String){
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             cal.set(Calendar.SECOND, 0)
@@ -58,25 +57,25 @@ class InputFragment : Fragment() {
         updateUi()
 
         binding?.btnMon?.setOnClickListener {
-            getTime("mon",0)
+            getTime("0_mon")
         }
         binding?.btnTue?.setOnClickListener {
-            getTime("tue", 1)
+            getTime("1_tue")
         }
         binding?.btnWen?.setOnClickListener {
-            getTime("wed",2)
+            getTime("2_wed")
         }
         binding?.btnTur?.setOnClickListener {
-            getTime("thu",3)
+            getTime("3_thu")
         }
         binding?.btnFri?.setOnClickListener {
-            getTime("fri",4)
+            getTime("4_fri")
         }
         binding?.btnSat?.setOnClickListener {
-            getTime("sat",5)
+            getTime("5_sat")
         }
         binding?.btnSun?.setOnClickListener {
-            getTime("sun",6)
+            getTime("6_sun")
         }
 
         //Alarm_On/Off_represent
