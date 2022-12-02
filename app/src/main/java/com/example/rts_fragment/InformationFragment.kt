@@ -25,30 +25,15 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.wayOne.observe(viewLifecycleOwner){
-            binding?.textWayGFirst?.text = viewModel.wayOne.value
-        }
-        viewModel.wayTwo.observe(viewLifecycleOwner){
-            binding?.textWayGSecond?.text = viewModel.wayOne.value
-        }
-        viewModel.wayThree.observe(viewLifecycleOwner){
-            binding?.textWaySFirst?.text = viewModel.wayOne.value
-        }
-        viewModel.wayFour.observe(viewLifecycleOwner){
-            binding?.textWaySSecond?.text = viewModel.wayOne.value
-        }
-
-        viewModel.timeOne.observe(viewLifecycleOwner){
-            binding?.textTimeGFirst?.text = viewModel.wayOne.value
-        }
-        viewModel.timeTwo.observe(viewLifecycleOwner){
-            binding?.textTimeGSecond?.text = viewModel.wayOne.value
-        }
-        viewModel.timeThree.observe(viewLifecycleOwner){
-            binding?.textTimeSFirst?.text = viewModel.wayOne.value
-        }
-        viewModel.timeFour.observe(viewLifecycleOwner){
-            binding?.textTimeSSecond?.text = viewModel.wayOne.value
+        viewModel.trainInfo.observe(viewLifecycleOwner){
+            binding?.textWayGFirst?.text = viewModel.getTrainWay(0)
+            binding?.textWayGSecond?.text = viewModel.getTrainWay(1)
+            binding?.textWaySFirst?.text = viewModel.getTrainWay(2)
+            binding?.textWaySSecond?.text = viewModel.getTrainWay(3)
+            binding?.textTimeGFirst?.text = viewModel.getTrainTime(0)
+            binding?.textTimeGSecond?.text = viewModel.getTrainTime(1)
+            binding?.textTimeSFirst?.text = viewModel.getTrainTime(2)
+            binding?.textTimeSSecond?.text = viewModel.getTrainTime(3)
         }
 
         binding?.btnUpdate?.setOnClickListener{

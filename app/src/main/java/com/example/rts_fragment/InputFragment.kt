@@ -20,16 +20,15 @@ class InputFragment : Fragment() {
     val viewModel: TraidDataViewModel by activityViewModels()
 
     fun updateUi(){
-        viewModel.wayOne.observe(viewLifecycleOwner){
-            binding?.textWayFirst?.text = viewModel.wayOne.value
-            binding?.textWaySecond?.text = viewModel.wayTwo.value
-            binding?.textWayThird?.text = viewModel.wayThree.value
-            binding?.textWayFourth?.text = viewModel.wayFour.value
-            binding?.textTimeFirst?.text = viewModel.timeOne.value
-            binding?.textTimeSecond?.text = viewModel.timeTwo.value
-            binding?.textTimeThird?.text = viewModel.timeThree.value
-            binding?.textTimeFourth?.text = viewModel.timeFour.value
-            println(viewModel.alarm)
+        viewModel.trainInfo.observe(viewLifecycleOwner){
+            binding?.textWayFirst?.text = viewModel.getTrainWay(0)
+            binding?.textWaySecond?.text = viewModel.getTrainWay(1)
+            binding?.textWayThird?.text = viewModel.getTrainWay(2)
+            binding?.textWayFourth?.text = viewModel.getTrainWay(3)
+            binding?.textTimeFirst?.text = viewModel.getTrainTime(0)
+            binding?.textTimeSecond?.text = viewModel.getTrainTime(1)
+            binding?.textTimeThird?.text = viewModel.getTrainTime(2)
+            binding?.textTimeFourth?.text = viewModel.getTrainTime(0)
         }
     }
 
@@ -41,9 +40,6 @@ class InputFragment : Fragment() {
             cal.set(Calendar.MINUTE, minute)
             val k = Timestamp(cal.timeInMillis)
             viewModel.setTime(day, k)
-            val t_dataFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss E", Locale("ko", "KR"))
-            //임시
-            binding?.textInputData?.text = t_dataFormat.format(k).toString()
         }
         TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
     }
@@ -68,7 +64,7 @@ class InputFragment : Fragment() {
             getTime("tue", 1)
         }
         binding?.btnWen?.setOnClickListener {
-            getTime("wen",2)
+            getTime("wed",2)
         }
         binding?.btnTur?.setOnClickListener {
             getTime("thu",3)
@@ -95,18 +91,21 @@ class InputFragment : Fragment() {
             binding?.radioButtonWayS?.isChecked = viewModel.isWay == true
             binding?.radioButtonWayG?.isChecked = viewModel.isWay == false
 
+
         }
 
         //Alarm_On/Off_Set
         binding?.chkMon?.setOnClickListener {
             viewModel.setZero(binding?.chkMon?.isChecked?: false)
-            binding?.textInputData?.text = binding?.chkMon?.isChecked.toString()
+            binding?.textInputData?.text = viewModel.isZero.toString()
         }
         binding?.chkTue?.setOnClickListener {
             viewModel.setOne(binding?.chkTue?.isChecked?: false)
+            binding?.textInputData?.text = viewModel.isOne.toString()
         }
         binding?.chkWen?.setOnClickListener {
             viewModel.setTwo(binding?.chkWen?.isChecked?: false)
+            binding?.textInputData?.text = viewModel.isTwo.toString()
         }
         binding?.chkTur?.setOnClickListener {
             viewModel.setThree(binding?.chkTur?.isChecked?: false)

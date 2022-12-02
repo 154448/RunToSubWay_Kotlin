@@ -3,9 +3,6 @@ package com.example.rts_fragment.viewmodel
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,37 +11,25 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-val UNCHECKED = booleanArrayOf(false, false, false, false, false, false, false, false)
+val UNCHECKED = mutableListOf<Boolean>(false, false, false, false, false, false, false, false)
+val NOTRAINDATA = mutableListOf<String>("일산행", "9:00", "문산행", "9:00", "청량리행", "9:10", "서울역행", "12:00")
 class TraidDataViewModel: ViewModel() {
     //AlarmData
-    private val _alarm = MutableLiveData<BooleanArray>(UNCHECKED)
-    val alarm: LiveData<BooleanArray> get() = _alarm
+    private val _alarm = MutableLiveData<MutableList<Boolean>>( UNCHECKED )
+    val alarm: MutableLiveData<MutableList<Boolean>> get() = _alarm
 
     private val repository = UserDataRepository()
     init{
         repository.getInfo(_alarm)
     }
+    private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
+    val trainInfo: MutableLiveData<MutableList<String>> get() = _trainInfo
 
     //Train_Information
-    private val _wayOne = MutableLiveData<String>("집으로")
-    val wayOne: LiveData<String> get() = _wayOne
-    private val _wayTwo = MutableLiveData<String>("가즈아")
-    val wayTwo: LiveData<String> get() = _wayTwo
-    private val _wayThree = MutableLiveData<String>("피곤타")
-    val wayThree: LiveData<String> get() = _wayThree
-    private val _wayFour = MutableLiveData<String>("빨리와")
-    val wayFour: LiveData<String> get() = _wayFour
+    fun getTrainWay(index: Int) = trainInfo.value?.get(index * 2)
+    fun getTrainTime(index: Int)= trainInfo.value?.get(index * 2 + 1)
 
-    private val _timeOne = MutableLiveData<String>("01:00")
-    val timeOne: LiveData<String> get() = _timeOne
-    private val _timeTwo = MutableLiveData<String>("02:00")
-    val timeTwo: LiveData<String> get() = _timeTwo
-    private val _timeThree = MutableLiveData<String>("03:00")
-    val timeThree: LiveData<String> get() = _timeThree
-    private val _timeFour = MutableLiveData<String>("04:00")
-    val timeFour: LiveData<String> get() = _timeFour
-
-    //For_input_Fragment_chkBox
+    //Alarm_Information
     val isZero get() = alarm.value?.get(0)
     val isOne get() = alarm.value?.get(1)
     val isTwo get() = alarm.value?.get(2)
@@ -55,46 +40,37 @@ class TraidDataViewModel: ViewModel() {
     //열차방면
     val isWay get() = alarm.value?.get(7)
 
-    private fun modifyAlarm(index: Int, newValue: Boolean){
-        _alarm.value = _alarm.value?.let{
-            val boolArr = it
-            boolArr[index] = newValue
-            boolArr
-        }?: UNCHECKED
-    }
 
     fun setZero(newValue: Boolean){
-        println(newValue)
-        modifyAlarm(0, newValue)
-        repository.updateAlarmChk("mon", newValue)
+        repository.updateAlarmChk("0_mon", newValue)
     }
     fun setOne(newValue: Boolean){
-        modifyAlarm(1, newValue)
-        repository.updateAlarmChk("tue", newValue)
+        //modifyAlarm(1, newValue)
+        repository.updateAlarmChk("1_tue", newValue)
     }
     fun setTwo(newValue: Boolean){
-        modifyAlarm(2, newValue)
-        repository.updateAlarmChk("wen", newValue)
+        //modifyAlarm(2, newValue)
+        repository.updateAlarmChk("2_wed", newValue)
     }
     fun setThree(newValue: Boolean){
-        modifyAlarm(3, newValue)
-        repository.updateAlarmChk("thu", newValue)
+        //modifyAlarm(3, newValue)
+        repository.updateAlarmChk("3_thu", newValue)
     }
     fun setFour(newValue: Boolean){
-        modifyAlarm(4,newValue)
-        repository.updateAlarmChk("fri", newValue)
+        //modifyAlarm(4,newValue)
+        repository.updateAlarmChk("4_fri", newValue)
     }
     fun setFive(newValue: Boolean){
-        modifyAlarm(5, newValue)
-        repository.updateAlarmChk("sat", newValue)
+        //modifyAlarm(5, newValue)
+        repository.updateAlarmChk("5_sat", newValue)
     }
     fun setSix(newValue: Boolean){
-        modifyAlarm(6, newValue)
-        repository.updateAlarmChk("sun", newValue)
+        //modifyAlarm(6, newValue)
+        repository.updateAlarmChk("6_sun", newValue)
     }
     //inputFragment_radioGroupWay
     fun setWay(newValue: Boolean){
-        modifyAlarm(7, newValue)
+        //modifyAlarm(7, newValue)
         repository.updateWay(newValue)
     }
 
