@@ -24,7 +24,7 @@ class InformationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.updateTrainInfo()
         viewModel.trainInfo.observe(viewLifecycleOwner){
             binding?.textWayGFirst?.text = viewModel.getTrainWay(0)
             binding?.textWayGSecond?.text = viewModel.getTrainWay(1)

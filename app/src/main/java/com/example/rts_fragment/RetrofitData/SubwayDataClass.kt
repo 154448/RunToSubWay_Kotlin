@@ -13,5 +13,3 @@ data class Body (
     @SerializedName("trainLineNm")val trainLineNm: String,
     @SerializedName("arvlMsg2")val arvlMsg2: String
 )
-
-data class TimeTo(val destination: String, val Msg2: String, val lineNm: String, var arvTm: Int = 0)

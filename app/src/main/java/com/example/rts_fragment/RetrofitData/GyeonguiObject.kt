@@ -1,5 +1,6 @@
-package com.example.rts_fragment
+package com.example.rts_fragment.RetrofitData
 
+import com.example.rts_fragment.GyeonguiApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

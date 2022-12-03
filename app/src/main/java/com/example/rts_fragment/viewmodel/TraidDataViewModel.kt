@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rts_fragment.loadTimeInfo
 import com.example.rts_fragment.repository.UserDataRepository
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -47,6 +48,10 @@ class TraidDataViewModel: ViewModel() {
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
     val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
 
+    fun updateTrainInfo(){
+        loadTimeInfo(_trainInfo)
+    }
+
     //사용자 수정여부 가져오기
     fun getModify(idx: Int) = modify.value?.get(idx)
 
@@ -70,6 +75,7 @@ class TraidDataViewModel: ViewModel() {
     val isSix get() = alarm.value?.get(6)
     //열차방면
     val isWay get() = way.value
+
 
     fun setAlarmChk(newValue: Boolean, idx: Int){
         val weekDays = WeekDay.values()
