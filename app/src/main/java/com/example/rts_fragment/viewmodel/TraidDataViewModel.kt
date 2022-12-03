@@ -20,6 +20,7 @@ enum class WeekDay (val path: String) {
     MONDAY("0_mon"), TUESDAY("1_tue"), WEDNESDAY("2_wed"), THURSDAY("3_thu"),
     FRIDAY("4_fri"), SATURDAY("5_sat"), SUNDAY("6_sun")
 }
+
 class TraidDataViewModel: ViewModel() {
     //AlarmData
     private val _alarm = MutableLiveData<MutableList<Boolean>>( UNCHECKED )
@@ -44,7 +45,10 @@ class TraidDataViewModel: ViewModel() {
     }
     //열차정보를 저장하는 배열: UI에서 열차정보를 제공하는 것은 이것을 통해 함. 여기에 저장하시면 됩니다.
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
-    val trainInfo: MutableLiveData<MutableList<String>> get() = _trainInfo
+    val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
+
+    //getTime
+    fun getUserTime(idx: Int) = userTime.value?.get(idx)
 
     //Train_Information
     fun getTrainWay(index: Int) = trainInfo.value?.get(index * 2)
