@@ -2,6 +2,7 @@ package com.example.rts_fragment
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -92,6 +93,7 @@ class InputFragment : Fragment() {
         //Alarm_On/Off_Set
         binding?.chkMon?.setOnClickListener {
             viewModel.setAlarmChk(binding?.chkMon?.isChecked?: false, 0)
+            Log.d("data", viewModel.getUserTime(2).toString())
         }
         binding?.chkTue?.setOnClickListener {
             viewModel.setAlarmChk(binding?.chkTue?.isChecked?: false, 1)

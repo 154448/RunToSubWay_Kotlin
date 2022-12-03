@@ -1,10 +1,15 @@
    package com.example.rts_fragment
 
-import android.app.ActionBar
+import android.annotation.SuppressLint
+import android.app.*
+import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -12,11 +17,15 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import com.example.rts_fragment.databinding.ActivityMainBinding
+import com.example.rts_fragment.viewmodel.TraidDataViewModel
 import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 
    class MainActivity : AppCompatActivity() {
@@ -33,8 +42,23 @@ import retrofit2.Response
         val currentNetwork = connectivityManager.getActiveNetwork()
         return currentNetwork.toString()
     }
+//       init{
+//           instance = this
+//       }
+//       companion object{
+//
+//           private var instance:MainActivity? = null
+//           fun getInstance(): MainActivity? {
+//               return instance
+//           }
+//       }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("gogogo","b")
+
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         //AppBar setting
@@ -49,7 +73,38 @@ import retrofit2.Response
 
         loadTimeInfo(1)
 
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            .build()
+
+        val workRequest = PeriodicWorkRequest.Builder(AlarmWorker::class.java,1,TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueue(workRequest)
+
+
+
+
     }
+
+
+
+//       fun makeAlarm(){
+//           val intent = Intent(this, AlarmReceiver::class.java)
+//           val pendingIntent = PendingIntent.getBroadcast(
+//               this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+//           val curTime = System.currentTimeMillis()
+//           val timeformat  = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+//           Log.d("hehehe",timeformat.format(curTime))
+//           Log.d("hehehe",curTime.toString())
+//           getSystemService(AlarmManager::class.java).setExact(
+//               AlarmManager.RTC_WAKEUP,
+//               System.currentTimeMillis()+10*1000,
+//               pendingIntent
+//           )
+//       }
 
     private fun loadTimeInfo(day: Int) {
         val call = GyeonguiObject.getApi.changeEnd()
