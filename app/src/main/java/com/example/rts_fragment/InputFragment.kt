@@ -18,19 +18,6 @@ class InputFragment : Fragment() {
     var binding : FragmentInputBinding? = null
     val viewModel: TraidDataViewModel by activityViewModels()
 
-    fun updateUi(){
-        viewModel.trainInfo.observe(viewLifecycleOwner){
-            binding?.textWayFirst?.text = viewModel.getTrainWay(0)
-            binding?.textWaySecond?.text = viewModel.getTrainWay(1)
-            binding?.textWayThird?.text = viewModel.getTrainWay(2)
-            binding?.textWayFourth?.text = viewModel.getTrainWay(3)
-            binding?.textTimeFirst?.text = viewModel.getTrainTime(0)
-            binding?.textTimeSecond?.text = viewModel.getTrainTime(1)
-            binding?.textTimeThird?.text = viewModel.getTrainTime(2)
-            binding?.textTimeFourth?.text = viewModel.getTrainTime(0)
-        }
-    }
-
     fun getTime(day: String){
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
@@ -54,7 +41,16 @@ class InputFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateUi()
+        viewModel.trainInfo.observe(viewLifecycleOwner){
+            binding?.textWayFirst?.text = viewModel.getTrainWay(0)
+            binding?.textWaySecond?.text = viewModel.getTrainWay(1)
+            binding?.textWayThird?.text = viewModel.getTrainWay(2)
+            binding?.textWayFourth?.text = viewModel.getTrainWay(3)
+            binding?.textTimeFirst?.text = viewModel.getTrainTime(0)
+            binding?.textTimeSecond?.text = viewModel.getTrainTime(1)
+            binding?.textTimeThird?.text = viewModel.getTrainTime(2)
+            binding?.textTimeFourth?.text = viewModel.getTrainTime(0)
+        }
 
         binding?.btnMon?.setOnClickListener {
             getTime("0_mon")
@@ -62,10 +58,10 @@ class InputFragment : Fragment() {
         binding?.btnTue?.setOnClickListener {
             getTime("1_tue")
         }
-        binding?.btnWen?.setOnClickListener {
+        binding?.btnWed?.setOnClickListener {
             getTime("2_wed")
         }
-        binding?.btnTur?.setOnClickListener {
+        binding?.btnThu?.setOnClickListener {
             getTime("3_thu")
         }
         binding?.btnFri?.setOnClickListener {
@@ -95,28 +91,25 @@ class InputFragment : Fragment() {
 
         //Alarm_On/Off_Set
         binding?.chkMon?.setOnClickListener {
-            viewModel.setZero(binding?.chkMon?.isChecked?: false)
-            binding?.textInputData?.text = viewModel.isZero.toString()
+            viewModel.setAlarmChk(binding?.chkMon?.isChecked?: false, 0)
         }
         binding?.chkTue?.setOnClickListener {
-            viewModel.setOne(binding?.chkTue?.isChecked?: false)
-            binding?.textInputData?.text = viewModel.isOne.toString()
+            viewModel.setAlarmChk(binding?.chkTue?.isChecked?: false, 1)
         }
         binding?.chkWen?.setOnClickListener {
-            viewModel.setTwo(binding?.chkWen?.isChecked?: false)
-            binding?.textInputData?.text = viewModel.isTwo.toString()
+            viewModel.setAlarmChk(binding?.chkWen?.isChecked?: false, 2)
         }
         binding?.chkTur?.setOnClickListener {
-            viewModel.setThree(binding?.chkTur?.isChecked?: false)
+            viewModel.setAlarmChk(binding?.chkTur?.isChecked?: false, 3)
         }
         binding?.chkFri?.setOnClickListener {
-            viewModel.setFour(binding?.chkFri?.isChecked?: false)
+            viewModel.setAlarmChk(binding?.chkFri?.isChecked?: false, 4)
         }
         binding?.chkSat?.setOnClickListener {
-            viewModel.setFive(binding?.chkSat?.isChecked?: false)
+            viewModel.setAlarmChk(binding?.chkSat?.isChecked?: false, 5)
         }
         binding?.chkSun?.setOnClickListener {
-            viewModel.setSix(binding?.chkSun?.isChecked?: false)
+            viewModel.setAlarmChk(binding?.chkSun?.isChecked?: false, 6)
         }
         //열차방면 설정 0이면 일산/ 1이면 서울
         binding?.radioGroupWay?.setOnCheckedChangeListener { group, checkedId ->

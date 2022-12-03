@@ -218,7 +218,7 @@
                 android:text="Wed" />
 
             <Button
-                android:id="@+id/btn_wen"
+                android:id="@+id/btn_wed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0sp"
@@ -270,7 +270,7 @@
                 android:text="Thu" />
 
             <Button
-                android:id="@+id/btn_tur"
+                android:id="@+id/btn_thu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0sp"
@@ -651,14 +651,4 @@
             android:orientation="vertical"></LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_inputData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
