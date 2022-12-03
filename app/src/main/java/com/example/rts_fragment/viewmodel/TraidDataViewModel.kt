@@ -47,8 +47,14 @@ class TraidDataViewModel: ViewModel() {
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
     val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
 
-    //getTime
+    //사용자 수정여부 가져오기
+    fun getModify(idx: Int) = modify.value?.get(idx)
+
+    //사용자 입력시간 가져오기
     fun getUserTime(idx: Int) = userTime.value?.get(idx)
+
+    //사용자 알림 활성화 여부 가져오기
+    fun getAlarmChk(idx: Int) = alarm.value?.get(idx)
 
     //Train_Information
     fun getTrainWay(index: Int) = trainInfo.value?.get(index * 2)
