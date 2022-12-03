@@ -42,7 +42,7 @@ class TraidDataViewModel: ViewModel() {
     init{
         repository.getInfo(_alarm, _modify, _way, _userTime)
     }
-
+    //열차정보를 저장하는 배열: UI에서 열차정보를 제공하는 것은 이것을 통해 함. 여기에 저장하시면 됩니다.
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
     val trainInfo: MutableLiveData<MutableList<String>> get() = _trainInfo
 
