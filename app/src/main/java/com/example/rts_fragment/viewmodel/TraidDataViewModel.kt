@@ -75,9 +75,4 @@ class TraidDataViewModel: ViewModel() {
     fun setTime(day: String, time: Timestamp){
         repository.updateTime(day, time)
     }
-
-
-
-
-
 }
