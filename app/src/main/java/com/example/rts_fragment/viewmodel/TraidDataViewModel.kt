@@ -11,6 +11,7 @@ import com.example.rts_fragment.repository.UserDataRepository
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Calendar
 
 val UNCHECKED = mutableListOf<Boolean>(false, false, false, false, false, false, false)
 val UNCKYWAY = false
@@ -57,6 +58,8 @@ class TraidDataViewModel: ViewModel() {
 
     //사용자 입력시간 가져오기
     fun getUserTime(idx: Int) = userTime.value?.get(idx)
+
+    val k = getUserTime(Calendar.DAY_OF_WEEK)
 
     //사용자 알림 활성화 여부 가져오기
     fun getAlarmChk(idx: Int) = alarm.value?.get(idx)

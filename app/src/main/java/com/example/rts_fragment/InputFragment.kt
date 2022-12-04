@@ -1,6 +1,11 @@
 package com.example.rts_fragment
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,13 +13,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.work.*
 import com.example.rts_fragment.databinding.FragmentInputBinding
 import com.example.rts_fragment.viewmodel.TraidDataViewModel
+import java.lang.Integer.max
 import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class InputFragment : Fragment() {
+
+
 
     var binding : FragmentInputBinding? = null
     val viewModel: TraidDataViewModel by activityViewModels()
@@ -32,6 +45,7 @@ class InputFragment : Fragment() {
     }
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +54,19 @@ class InputFragment : Fragment() {
         return binding?.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val constraints = Constraints.Builder()
+//            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+//            .build()
+//
+//        val workRequest = PeriodicWorkRequest.Builder(AlarmWorker::class.java,1, TimeUnit.DAYS)
+//            .setConstraints(constraints)
+//            .build()
+//
+//        WorkManager.getInstance().enqueueUniquePeriodicWork("stable", ExistingPeriodicWorkPolicy.REPLACE,workRequest)
         viewModel.trainInfo.observe(viewLifecycleOwner){
             binding?.textWayFirst?.text = viewModel.getTrainWay(0)
             binding?.textWaySecond?.text = viewModel.getTrainWay(1)
@@ -124,10 +149,34 @@ class InputFragment : Fragment() {
                 }
             }
         }
+        binding?.btnFinished?.setOnClickListener {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+                .build()
+
+            val cTime = Calendar.getInstance()
+            val delayTime=24-cTime.get(Calendar.HOUR).toLong()
+
+
+            val workRequest = PeriodicWorkRequest.Builder(AlarmWorker::class.java,1, TimeUnit.DAYS)
+                .setConstraints(constraints)
+                .setInitialDelay(delayTime,TimeUnit.HOURS)
+                .build()
+
+            val tempWorkRequest = OneTimeWorkRequest.from(AlarmWorker::class.java)
+
+            WorkManager.getInstance().enqueue(tempWorkRequest)
+
+            WorkManager.getInstance().enqueueUniquePeriodicWork("stable", ExistingPeriodicWorkPolicy.REPLACE,workRequest)
+
+        }
     }
 
     override fun onDestroyView() {
+
         super.onDestroyView()
         binding = null
     }
+
+
 }
