@@ -1,12 +1,15 @@
 package com.example.rts_fragment.viewmodel
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.rts_fragment.loadTimeInfo
+import com.example.rts_fragment.LoadTimeInfo
+import com.example.rts_fragment.MainActivity
 import com.example.rts_fragment.repository.UserDataRepository
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -49,8 +52,10 @@ class TraidDataViewModel: ViewModel() {
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
     val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
 
+    val trainInfoAPI = LoadTimeInfo()
+
     fun updateTrainInfo(){
-        loadTimeInfo(_trainInfo)
+        trainInfoAPI.loadTimeInfo(_trainInfo)
     }
 
     //사용자 수정여부 가져오기

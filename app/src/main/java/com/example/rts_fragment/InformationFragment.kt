@@ -37,6 +37,7 @@ class InformationFragment : Fragment() {
         }
 
         binding?.btnUpdate?.setOnClickListener{
+            viewModel.updateTrainInfo()
         }
     }
 
