@@ -165,7 +165,7 @@ class InputFragment : Fragment() {
 
             val tempWorkRequest = OneTimeWorkRequest.from(AlarmWorker::class.java)
 
-            WorkManager.getInstance().enqueue(tempWorkRequest)
+            WorkManager.getInstance().enqueueUniqueWork("one", ExistingWorkPolicy.REPLACE,tempWorkRequest)
 
             WorkManager.getInstance().enqueueUniquePeriodicWork("stable", ExistingPeriodicWorkPolicy.REPLACE,workRequest)
 

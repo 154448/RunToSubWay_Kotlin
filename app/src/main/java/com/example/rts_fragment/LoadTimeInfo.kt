@@ -1,17 +1,21 @@
 package com.example.rts_fragment
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.rts_fragment.retrofitData.Body
-import com.example.rts_fragment.retrofitData.Gyeongui
-import com.example.rts_fragment.retrofitData.GyeonguiObject
+import androidx.navigation.fragment.NavHostFragment
+import com.example.rts_fragment.RetrofitData.GyeonguiObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
-class LoadTimeInfo{
+class LoadTimeInfo(){
+
 
     fun loadTimeInfo(test: MutableLiveData<MutableList<String>>){
+
         val call = GyeonguiObject.getApi.changeEnd()
         call.enqueue(object: Callback<Gyeongui> {
             override fun onResponse(call: Call<Gyeongui>, response: Response<Gyeongui>) {
@@ -35,33 +39,34 @@ class LoadTimeInfo{
 
     }
 
-fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
-    var trainInfoArray = mutableListOf<String>("일산행", "9:00", "문산행", "9:00", "청량리행", "9:10", "서울역행", "12:00")
-    var count = 0
-    for(i in body.indices){
-        val array = splitString(body[i].arvlMsg2, body[i].trainLineNm)
-        when(body[i].updnLine){
-            "상행" -> {
-                if(count >= 2) continue
-                trainInfoArray.add(count*2,array[1])
-                trainInfoArray.add(count*2+1,array[0])
-                Log.d("MainActivity", trainInfoArray[count*2])
-                Log.d("MainActivity", trainInfoArray[count*2+1])
-                count++
+    fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
+        var trainInfoArray = mutableListOf<String>("일산행", "9:00", "문산행", "9:00", "청량리행", "9:10", "서울역행", "12:00")
+        var count = 0
+        for(i in body.indices){
+            val array = splitString(body[i].arvlMsg2, body[i].trainLineNm)
+            when(body[i].updnLine){
+                "상행" -> {
+                    if(count >= 2) continue
+                    trainInfoArray.add(count*2,array[1])
+                    trainInfoArray.add(count*2+1,array[0])
+                    Log.d("MainActivity", trainInfoArray[count*2])
+                    Log.d("MainActivity", trainInfoArray[count*2+1])
+                    count++
 
-            }
-            "하행" -> {
-                if(count == 4) break
-                trainInfoArray.add(count*2,array[1])
-                trainInfoArray.add(count*2+1,array[0])
-                Log.d("MainActivity", trainInfoArray[count*2])
-                Log.d("MainActivity", trainInfoArray[count*2+1])
-                count++
+                }
+                "하행" -> {
+                    if(count == 4) break
+                    trainInfoArray.add(count*2,array[1])
+                    trainInfoArray.add(count*2+1,array[0])
+                    Log.d("MainActivity", trainInfoArray[count*2])
+                    Log.d("MainActivity", trainInfoArray[count*2+1])
+                    count++
+                }
             }
         }
+        Log.d("jebal",trainInfoArray.toString())
+        return trainInfoArray
     }
-    return trainInfoArray
-}
 
     private fun splitString(str1: String, str2: String):Array<String> {
         val returnArr = arrayOf<String>("","")
@@ -82,3 +87,9 @@ fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비�
 }
 
 
+/*fun updateUiData(arr: MutableLiveData<MutableList<String>>){
+    val newArr = loadTimeInfo()
+    arr.postValue(newArr)
+}
+
+ */

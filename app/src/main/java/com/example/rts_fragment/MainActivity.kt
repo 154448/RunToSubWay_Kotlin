@@ -8,7 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
-import com.example.rts_fragment.retrofitData.GyeonguiObject
+//import com.example.rts_fragment.retrofitData.GyeonguiObject
 import com.example.rts_fragment.databinding.ActivityMainBinding
 import com.example.rts_fragment.viewmodel.TraidDataViewModel
 import org.json.JSONArray
