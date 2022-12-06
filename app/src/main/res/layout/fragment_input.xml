@@ -44,10 +44,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <Space
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/btn_finished"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:backgroundTint="#FA4A4A"
+                android:text="설정완료" />
 
         </LinearLayout>
 
@@ -650,13 +652,5 @@
             android:hapticFeedbackEnabled="false"
             android:orientation="vertical"></LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_finished"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="설정완료"
-        tools:layout_editor_absoluteX="290dp"
-        tools:layout_editor_absoluteY="536dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

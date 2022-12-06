@@ -13,6 +13,6 @@ object GyeonguiObject {
 
 
     //getApi는 Gyeongui_Api객체이다.
-    val getApi = retrofit.create(GyeonguiApi::class.java)
+    val getApi : GyeonguiApi = retrofit.create(GyeonguiApi::class.java)
 
 }

@@ -7,21 +7,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.*
-//import com.example.rts_fragment.retrofitData.GyeonguiObject
 import com.example.rts_fragment.databinding.ActivityMainBinding
-import com.example.rts_fragment.viewmodel.TraidDataViewModel
-import org.json.JSONArray
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.concurrent.TimeUnit
+
 
 
    class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
+    //오프라인일때 기능 구현하다가...
     fun chkOnline(): String{
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         val currentNetwork = connectivityManager.getActiveNetwork()
@@ -30,7 +23,6 @@ import java.util.concurrent.TimeUnit
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         //AppBar setting
@@ -42,8 +34,6 @@ import java.util.concurrent.TimeUnit
 
         binding.bottomNav.setupWithNavController(navController)
         setContentView(binding.root)
-
-
     }
 
 

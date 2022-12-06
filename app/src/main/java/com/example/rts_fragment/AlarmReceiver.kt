@@ -2,18 +2,14 @@ package com.example.rts_fragment
 
 
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.rts_fragment.RetrofitData.GyeonguiObject
@@ -21,15 +17,15 @@ import com.example.rts_fragment.viewmodel.NOTRAINDATA
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import kotlin.collections.ArrayList
 
 const val NOTIFICATION_ID = 2
 class AlarmReceiver: BroadcastReceiver(){
 
-//    private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
-//    val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
-    fun loadTimeInfo(test: MutableLiveData<MutableList<String>>,intent: Intent?){
+    private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
+    val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
+    fun loadTimeInfo(test: MutableLiveData<MutableList<String>>){
+        Log.d("aaa",test.toString())
         val call = GyeonguiObject.getApi.changeEnd()
         call.enqueue(object: Callback<Gyeongui> {
             override fun onResponse(call: Call<Gyeongui>, response: Response<Gyeongui>) {
@@ -40,7 +36,7 @@ class AlarmReceiver: BroadcastReceiver(){
                             Log.d("MainActivity", data.toString())
                         }
                     }
-                    test.postValue(dataSave(response.body()!!.body,intent))
+                    test.postValue(dataSave(response.body()!!.body))
                 }else{
                     Log.d("MainActivity", "response가 실패")
                 }
@@ -54,7 +50,7 @@ class AlarmReceiver: BroadcastReceiver(){
     }
 
 
-    fun dataSave(body: ArrayList<Body>,intent: Intent?): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
+    fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
         var trainInfoArray = mutableListOf<String>()
         var count = 0
         for(i in body.indices){
@@ -79,11 +75,8 @@ class AlarmReceiver: BroadcastReceiver(){
                 }
             }
         }
-        Log.d("jebalk",trainInfoArray.toString())
-//        intent?.setData(
-//            Uri.parse(trainInfoArray.toString()))
-        //Log.d("jebal",trainInfoArray.toString())
-        intent?.putExtra("jebal",trainInfoArray.toString())
+        Log.d("jebal6",trainInfoArray.toString())
+
         return trainInfoArray
     }
 
@@ -106,29 +99,18 @@ class AlarmReceiver: BroadcastReceiver(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
-//        val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
-//        //val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
-        //loadTimeInfo(_trainInfo)
-        val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
-        Log.d("jabalkg",_trainInfo.value.toString())
-        //dataSave(_trainInfo)
-        //Log.d("jebal",_trainInfo.toString())
-        loadTimeInfo(_trainInfo,intent)
-
-
-
-
-
+        loadTimeInfo(_trainInfo)
+//
 
         val contentIntent = Intent(context , MainActivity::class.java)
         Log.d("time","wwww")
+        val a = intent?.getStringExtra("jebal")
+        Log.d("jebal8",a.toString())
 
         val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_IMMUTABLE)
         val notification = Notification.Builder(context, App.ALERT_CHANNEL_ID)
             .setContentTitle("전철도착정보")
-            .setContentText(intent?.getStringExtra("jebal"))
-            //.setContentText(intent?.dataString)
-            //.setContentText(_trainInfo.value.toString())
+            .setContentText("곧 열차 탑승시간 입니다. 앱에서 열차 정보를 확인하세요!")
             .setSmallIcon(R.drawable.ic_baseline_train_24)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

@@ -1,38 +1,25 @@
 package com.example.rts_fragment
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TimePicker
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.work.*
 import com.example.rts_fragment.databinding.FragmentInputBinding
 import com.example.rts_fragment.viewmodel.TraidDataViewModel
-import java.lang.Integer.max
+import com.example.rts_fragment.viewmodel.WeekDay
 import java.sql.Timestamp
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class InputFragment : Fragment() {
-
-
-
     var binding : FragmentInputBinding? = null
     val viewModel: TraidDataViewModel by activityViewModels()
 
-    fun getTime(day: String){
+    fun getTime(day: WeekDay){
         val cal = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             cal.set(Calendar.SECOND, 0)
@@ -45,7 +32,6 @@ class InputFragment : Fragment() {
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,19 +40,8 @@ class InputFragment : Fragment() {
         return binding?.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val constraints = Constraints.Builder()
-//            .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
-//            .build()
-//
-//        val workRequest = PeriodicWorkRequest.Builder(AlarmWorker::class.java,1, TimeUnit.DAYS)
-//            .setConstraints(constraints)
-//            .build()
-//
-//        WorkManager.getInstance().enqueueUniquePeriodicWork("stable", ExistingPeriodicWorkPolicy.REPLACE,workRequest)
         viewModel.trainInfo.observe(viewLifecycleOwner){
             binding?.textWayFirst?.text = viewModel.getTrainWay(0)
             binding?.textWaySecond?.text = viewModel.getTrainWay(1)
@@ -79,36 +54,36 @@ class InputFragment : Fragment() {
         }
 
         binding?.btnMon?.setOnClickListener {
-            getTime("0_mon")
+            getTime(WeekDay.MONDAY)
         }
         binding?.btnTue?.setOnClickListener {
-            getTime("1_tue")
+            getTime(WeekDay.TUESDAY)
         }
         binding?.btnWed?.setOnClickListener {
-            getTime("2_wed")
+            getTime(WeekDay.WEDNESDAY)
         }
         binding?.btnThu?.setOnClickListener {
-            getTime("3_thu")
+            getTime(WeekDay.THURSDAY)
         }
         binding?.btnFri?.setOnClickListener {
-            getTime("4_fri")
+            getTime(WeekDay.FRIDAY)
         }
         binding?.btnSat?.setOnClickListener {
-            getTime("5_sat")
+            getTime(WeekDay.SATURDAY)
         }
         binding?.btnSun?.setOnClickListener {
-            getTime("6_sun")
+            getTime(WeekDay.SUNDAY)
         }
 
         //Alarm_On/Off_represent
         viewModel.alarm.observe(viewLifecycleOwner){
-            binding?.chkMon?.isChecked = viewModel.isZero == true
-            binding?.chkTue?.isChecked = viewModel.isOne == true
-            binding?.chkWen?.isChecked = viewModel.isTwo == true
-            binding?.chkTur?.isChecked = viewModel.isThree == true
-            binding?.chkFri?.isChecked = viewModel.isFour == true
-            binding?.chkSat?.isChecked = viewModel.isFive == true
-            binding?.chkSun?.isChecked = viewModel.isSix == true
+            binding?.chkMon?.isChecked = viewModel.getAlarmChk(WeekDay.MONDAY) == true
+            binding?.chkTue?.isChecked = viewModel.getAlarmChk(WeekDay.TUESDAY) == true
+            binding?.chkWen?.isChecked = viewModel.getAlarmChk(WeekDay.WEDNESDAY) == true
+            binding?.chkTur?.isChecked = viewModel.getAlarmChk(WeekDay.THURSDAY) == true
+            binding?.chkFri?.isChecked = viewModel.getAlarmChk(WeekDay.FRIDAY) == true
+            binding?.chkSat?.isChecked = viewModel.getAlarmChk(WeekDay.SATURDAY) == true
+            binding?.chkSun?.isChecked = viewModel.getAlarmChk(WeekDay.SUNDAY) == true
             binding?.radioButtonWayS?.isChecked = viewModel.isWay == true
             binding?.radioButtonWayG?.isChecked = viewModel.isWay == false
 
@@ -117,26 +92,25 @@ class InputFragment : Fragment() {
 
         //Alarm_On/Off_Set
         binding?.chkMon?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkMon?.isChecked?: false, 0)
-            Log.d("data", viewModel.getUserTime(2).toString())
+            viewModel.setAlarmChk(binding?.chkMon?.isChecked?: false, WeekDay.MONDAY)
         }
         binding?.chkTue?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkTue?.isChecked?: false, 1)
+            viewModel.setAlarmChk(binding?.chkTue?.isChecked?: false, WeekDay.TUESDAY)
         }
         binding?.chkWen?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkWen?.isChecked?: false, 2)
+            viewModel.setAlarmChk(binding?.chkWen?.isChecked?: false, WeekDay.WEDNESDAY)
         }
         binding?.chkTur?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkTur?.isChecked?: false, 3)
+            viewModel.setAlarmChk(binding?.chkTur?.isChecked?: false, WeekDay.THURSDAY)
         }
         binding?.chkFri?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkFri?.isChecked?: false, 4)
+            viewModel.setAlarmChk(binding?.chkFri?.isChecked?: false, WeekDay.FRIDAY)
         }
         binding?.chkSat?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkSat?.isChecked?: false, 5)
+            viewModel.setAlarmChk(binding?.chkSat?.isChecked?: false, WeekDay.SATURDAY)
         }
         binding?.chkSun?.setOnClickListener {
-            viewModel.setAlarmChk(binding?.chkSun?.isChecked?: false, 6)
+            viewModel.setAlarmChk(binding?.chkSun?.isChecked?: false, WeekDay.SUNDAY)
         }
         //열차방면 설정 0이면 일산/ 1이면 서울
         binding?.radioGroupWay?.setOnCheckedChangeListener { group, checkedId ->
@@ -173,10 +147,7 @@ class InputFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-
         super.onDestroyView()
         binding = null
     }
-
-
 }

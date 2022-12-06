@@ -1,29 +1,20 @@
 package com.example.rts_fragment.viewmodel
 
-import android.app.Activity
-import android.content.Context
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rts_fragment.LoadTimeInfo
-import com.example.rts_fragment.MainActivity
 import com.example.rts_fragment.repository.UserDataRepository
 import java.sql.Timestamp
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.Calendar
+
 
 val UNCHECKED = mutableListOf<Boolean>(false, false, false, false, false, false, false)
 val UNCKYWAY = false
-val UNUPDATED = mutableListOf<Boolean>(false, false, false, false, false, false, false)
 val NOTRAINDATA = mutableListOf<String>("일산행", "9:00", "문산행", "9:00", "청량리행", "9:10", "서울역행", "12:00")
 
-enum class WeekDay (val path: String) {
-    MONDAY("0_mon"), TUESDAY("1_tue"), WEDNESDAY("2_wed"), THURSDAY("3_thu"),
-    FRIDAY("4_fri"), SATURDAY("5_sat"), SUNDAY("6_sun")
+enum class WeekDay (val path: String, val idx: Int) {
+    MONDAY("0_mon", 0), TUESDAY("1_tue", 1), WEDNESDAY("2_wed", 2), THURSDAY("3_thu", 3),
+    FRIDAY("4_fri", 4), SATURDAY("5_sat", 5), SUNDAY("6_sun", 6)
 }
 
 class TraidDataViewModel: ViewModel() {
@@ -35,68 +26,44 @@ class TraidDataViewModel: ViewModel() {
     private val _way = MutableLiveData<Boolean>(UNCKYWAY)
     val way: LiveData<Boolean> get() = _way
 
-    //요일별 사용자의 시간 입력 여부: 초기값 false, timePicker로 시간 입력시 True로 변환
-    private val _modify = MutableLiveData<MutableList<Boolean>>( UNUPDATED )
-    val modify: LiveData<MutableList<Boolean>> get() = _modify
-
-    //사용자의 입력시간 저장
-    private val _userTime = MutableLiveData<MutableList<com.google.firebase.Timestamp>>()
-    val userTime: LiveData<MutableList<com.google.firebase.Timestamp>>  get() = _userTime
-
     //사용자가 데이터를 바꿀때마다 실시간으로 관찰해서 앱에 저장
     private val repository = UserDataRepository()
     init{
-        repository.getInfo(_alarm, _modify, _way, _userTime)
+        repository.getInfo(_alarm, _way)
     }
     //열차정보를 저장하는 배열: UI에서 열차정보를 제공하는 것은 이것을 통해 함. 여기에 저장하시면 됩니다.
     private val _trainInfo = MutableLiveData<MutableList<String>>( NOTRAINDATA )
     val trainInfo: LiveData<MutableList<String>> get() = _trainInfo
 
-    val trainInfoAPI = LoadTimeInfo()
+    //실시간 경의선 정보(화전역)데이터를 가져오기 위한 객채생성
+    private val trainInfoAPI = LoadTimeInfo()
 
+    //열차정보 실시간 업데이트
     fun updateTrainInfo(){
         trainInfoAPI.loadTimeInfo(_trainInfo)
     }
 
-    //사용자 수정여부 가져오기
-    fun getModify(idx: Int) = modify.value?.get(idx)
-
-    //사용자 입력시간 가져오기
-    fun getUserTime(idx: Int) = userTime.value?.get(idx)
-
-    val k = getUserTime(Calendar.DAY_OF_WEEK)
-
     //사용자 알림 활성화 여부 가져오기
-    fun getAlarmChk(idx: Int) = alarm.value?.get(idx)
+    fun getAlarmChk(day: WeekDay) = alarm.value?.get(day.idx)
 
     //Train_Information
     fun getTrainWay(index: Int) = trainInfo.value?.get(index * 2)
     fun getTrainTime(index: Int)= trainInfo.value?.get(index * 2 + 1)
 
-    //Alarm_Information
-    val isZero get() = alarm.value?.get(0)
-    val isOne get() = alarm.value?.get(1)
-    val isTwo get() = alarm.value?.get(2)
-    val isThree get() = alarm.value?.get(3)
-    val isFour get() = alarm.value?.get(4)
-    val isFive get() = alarm.value?.get(5)
-    val isSix get() = alarm.value?.get(6)
     //열차방면
     val isWay get() = way.value
 
-
-    fun setAlarmChk(newValue: Boolean, idx: Int){
-        val weekDays = WeekDay.values()
-        val doc = weekDays[(idx) % weekDays.size].path
-        repository.updateAlarmChk(doc, newValue)
+    fun setAlarmChk(newValue: Boolean, day:WeekDay) {
+        repository.updateAlarmChk(day.path, newValue)
     }
+
 
     //inputFragment_radioGroupWay
     fun setWay(newValue: Boolean){
         repository.updateWay(newValue)
     }
 
-    fun setTime(day: String, time: Timestamp){
-        repository.updateTime(day, time)
+    fun setTime(day: WeekDay, time: Timestamp){
+        repository.updateTime(day.path, time)
     }
 }

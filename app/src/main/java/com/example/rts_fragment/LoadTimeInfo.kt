@@ -1,21 +1,15 @@
 package com.example.rts_fragment
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.NavHostFragment
 import com.example.rts_fragment.RetrofitData.GyeonguiObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import kotlin.collections.ArrayList
 
 class LoadTimeInfo(){
-
-
     fun loadTimeInfo(test: MutableLiveData<MutableList<String>>){
-
         val call = GyeonguiObject.getApi.changeEnd()
         call.enqueue(object: Callback<Gyeongui> {
             override fun onResponse(call: Call<Gyeongui>, response: Response<Gyeongui>) {
@@ -39,7 +33,7 @@ class LoadTimeInfo(){
 
     }
 
-    fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
+    private fun dataSave(body: ArrayList<Body>): MutableList<String> {  //메인 액티비티에서 loadTimeInfo 함수를 실행시켰다면 body에 data가 들어있음.
         var trainInfoArray = mutableListOf<String>("일산행", "9:00", "문산행", "9:00", "청량리행", "9:10", "서울역행", "12:00")
         var count = 0
         for(i in body.indices){
@@ -64,7 +58,7 @@ class LoadTimeInfo(){
                 }
             }
         }
-        Log.d("jebal",trainInfoArray.toString())
+
         return trainInfoArray
     }
 
@@ -83,13 +77,6 @@ class LoadTimeInfo(){
         returnArr[1] = trainLine
 
         return returnArr
-}
-}
-
-
-/*fun updateUiData(arr: MutableLiveData<MutableList<String>>){
-    val newArr = loadTimeInfo()
-    arr.postValue(newArr)
+    }
 }
 
- */
